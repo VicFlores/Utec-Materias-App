@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, Button, ButtonTable } from './style';
 import {
   TableContainer,
@@ -9,8 +9,36 @@ import {
   Tbody,
   Table,
 } from '../../pages/GlobalStyle';
+import { AuthContext } from '../../context/AuthContext';
+import { findUsers } from '../../helpers/findUsers';
+import jwt_decode from 'jwt-decode';
+import { useNavigate } from '@reach/router';
+import { deleteUser } from '../../helpers/deleteUser';
 
 export const UserTable = () => {
+  const [user, setUser] = useState([]);
+  const navigate = useNavigate();
+  const { auth, removeAuth } = useContext(AuthContext);
+
+  const decoded = jwt_decode(auth);
+
+  const getUsers = async () => {
+    const response = await findUsers(decoded, auth);
+    if (response.status === 401) {
+      removeAuth();
+      return navigate('/login');
+    }
+
+    return setUser(response);
+  };
+  useEffect(() => {
+    getUsers();
+  }, []);
+
+  const handleDelete = async (id) => {
+    const res = await deleteUser(id, auth, decoded);
+  };
+
   return (
     <>
       <Button>
@@ -18,7 +46,7 @@ export const UserTable = () => {
       </Button>
 
       <TableContainer>
-        <Table>
+        <Table className="animate__animated animate__fadeInLeft">
           <Thead>
             <tr>
               <Th>Firstname</Th>
@@ -30,112 +58,25 @@ export const UserTable = () => {
           </Thead>
 
           <Tbody>
-            <Tr>
-              <Td>Vic Ferman</Td>
-              <Td>Flores Escobar</Td>
-              <Td>vicflores2211@gmail.com</Td>
-              <Td>
-                <Link to="/edit-user">
-                  <ButtonTable options="edit">Edit</ButtonTable>
-                </Link>
-              </Td>
-              <Td>
-                <ButtonTable>Delete</ButtonTable>
-              </Td>
-            </Tr>
-
-            <Tr>
-              <Td>Fernando Jose</Td>
-              <Td>Aguilar Rivas</Td>
-              <Td>fjrivas@gmail.com</Td>
-              <Td>
-                <Link to="/edit-user">
-                  <ButtonTable options="edit">Edit</ButtonTable>
-                </Link>
-              </Td>
-              <Td>
-                <ButtonTable>Delete</ButtonTable>
-              </Td>
-            </Tr>
-
-            <Tr>
-              <Td>Zaira Renee</Td>
-              <Td>Flores Hernandez</Td>
-              <Td>zaira22@gmail.com</Td>
-              <Td>
-                <Link to="/edit-user">
-                  <ButtonTable options="edit">Edit</ButtonTable>
-                </Link>
-              </Td>
-              <Td>
-                <ButtonTable>Delete</ButtonTable>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>Madeline Melissa</Td>
-              <Td>Cañada Hernandez</Td>
-              <Td>mel45@gmail.com</Td>
-              <Td>
-                <Link to="/edit-user">
-                  <ButtonTable options="edit">Edit</ButtonTable>
-                </Link>
-              </Td>
-              <Td>
-                <ButtonTable>Delete</ButtonTable>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>Kaylee Maria</Td>
-              <Td>Henriquez Hernandez</Td>
-              <Td>vicflores2211@gmail.com</Td>
-              <Td>
-                <Link to="/edit-user">
-                  <ButtonTable options="edit">Edit</ButtonTable>
-                </Link>
-              </Td>
-              <Td>
-                <ButtonTable>Delete</ButtonTable>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>Andrea Elena</Td>
-              <Td>Navas Hernandez</Td>
-              <Td>vicflores2211@gmail.com</Td>
-              <Td>
-                <Link to="/edit-user">
-                  <ButtonTable options="edit">Edit</ButtonTable>
-                </Link>
-              </Td>
-              <Td>
-                <ButtonTable>Delete</ButtonTable>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>Andrea Elena</Td>
-              <Td>Navas Hernandez</Td>
-              <Td>vicflores2211@gmail.com</Td>
-              <Td>
-                <Link to="/edit-user">
-                  <ButtonTable options="edit">Edit</ButtonTable>
-                </Link>
-              </Td>
-              <Td>
-                <ButtonTable>Delete</ButtonTable>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>Andrea Elena</Td>
-              <Td>Navas Hernandez</Td>
-              <Td>vicflores2211@gmail.com</Td>
-              <Td>
-                <Link to="/edit-user">
-                  <ButtonTable options="edit">Edit</ButtonTable>
-                </Link>
-              </Td>
-              <Td>
-                <ButtonTable>Delete</ButtonTable>
-              </Td>
-            </Tr>
+            {user.reverse().map((user) => {
+              return (
+                <Tr key={user.id}>
+                  <Td>{user.firstname}</Td>
+                  <Td>{user.lastname}</Td>
+                  <Td>{user.email}</Td>
+                  <Td>
+                    <Link to={`/edit-user/${user.id}`}>
+                      <ButtonTable options="edit">Edit</ButtonTable>
+                    </Link>
+                  </Td>
+                  <Td>
+                    <ButtonTable onClick={() => handleDelete(user.id)}>
+                      Delete
+                    </ButtonTable>
+                  </Td>
+                </Tr>
+              );
+            })}
           </Tbody>
         </Table>
       </TableContainer>
