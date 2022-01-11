@@ -31,9 +31,10 @@ export const TableContainer = styled.section`
   height: 100vh;
   display: flex;
   padding: 20px;
-  margin: 15px 0;
+  margin: 15px 0 50px 0;
   justify-content: center;
   align-items: flex-start;
+  overflow-y: scroll;
 
   @media screen and (max-width: 1056px) {
     overflow: scroll;
@@ -58,6 +59,7 @@ export const Tr = styled.tr`
   border-width: 0 0 1px 0;
   border-style: solid;
   border-color: #2C272E
+  
 
   :hover {
     background: #dddddd;
