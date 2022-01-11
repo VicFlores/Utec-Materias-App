@@ -1,11 +1,11 @@
 import React from 'react';
 import { Layout } from '../components/layout/Layout';
-import { SectionForm } from '../components/sectionForm/SectionForm';
+import { SectionTable } from '../components/sectionTable/SectionTable';
 
 export const Sections = () => {
   return (
     <Layout>
-      <SectionForm />
+      <SectionTable />
     </Layout>
   );
 };
