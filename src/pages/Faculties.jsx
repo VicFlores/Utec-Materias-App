@@ -1,11 +1,11 @@
 import React from 'react';
-import { FacultyForm } from '../components/facultyForm/FacultyForm';
+import { FacultyTable } from '../components/facultyTable/FacultyTable';
 import { Layout } from '../components/layout/Layout';
 
 export const Faculties = () => {
   return (
     <Layout>
-      <FacultyForm />
+      <FacultyTable />
     </Layout>
   );
 };
