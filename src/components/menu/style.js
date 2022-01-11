@@ -34,3 +34,18 @@ export const Link = styled(LinkRouter)`
     color: #d3e4cd;
   }
 `;
+
+export const LogoutContainer = styled.div`
+  width: 100%;
+  margin: 10px 0 0 0;
+  padding: 0 30px;
+`;
+
+export const Logout = styled.button`
+  background-color: #7cbd1e;
+  color: #fafafa;
+  border-radius: 5px;
+  height: 38px;
+  border-style: none;
+  width: 100%;
+`;
