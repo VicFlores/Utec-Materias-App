@@ -1,5 +1,7 @@
-import React from 'react';
-import { ButtonTable, Title } from './style';
+import React, { useContext, useEffect, useState } from 'react';
+import jwt_decode from 'jwt-decode';
+import { AuthContext } from '../../context/AuthContext';
+import { ButtonTable, Link, Title } from './style';
 import {
   TableContainer,
   Table,
@@ -9,14 +11,41 @@ import {
   Th,
   Td,
 } from '../../pages/GlobalStyle';
+import { findClassDetailByEmail } from '../../helpers/findClassDetailByEmail';
+import { newTimeStamp } from '../../helpers/newTimeStamp';
 
 export const Dashboard = () => {
+  const [user, setUser] = useState([]);
+  const { auth } = useContext(AuthContext);
+
+  const decoded = jwt_decode(auth);
+
+  const getUserByEmail = async () => {
+    const response = await findClassDetailByEmail(decoded, auth);
+    setUser(response);
+  };
+
+  const handleTimeStampStart = async (id) => {
+    const date = new Date();
+
+    const data = {
+      start: `${date.toDateString()} ${date.toLocaleTimeString()}`,
+      idClassDetail: id,
+    };
+
+    await newTimeStamp(auth, decoded, data);
+  };
+
+  useEffect(() => {
+    getUserByEmail();
+  }, []);
+
   return (
     <>
       <Title>My Lessons</Title>
 
       <TableContainer>
-        <Table>
+        <Table className="animate__animated animate__fadeInLeft">
           <Thead>
             <tr>
               <Th>Inscribed</Th>
@@ -26,60 +55,41 @@ export const Dashboard = () => {
               <Th>Days</Th>
               <Th>Modality</Th>
               <Th>Link or classroom</Th>
+              <Th>Time Stamp</Th>
             </tr>
           </Thead>
 
           <Tbody>
-            <Tr>
-              <Td>52</Td>
-              <Td>PROGRAMACIÓN IV</Td>
-              <Td>03</Td>
-              <Td>8:00-9:30</Td>
-              <Td>Lun-Vie</Td>
-              <Td>Virtual</Td>
-              <Td>
-                <a
-                  target="_blank"
-                  href="https://teams.microsoft.com/l/team/19%3alw8H9l9fzwTT5EHtWFIPo4Iw_PKAUiMOWCqnC2XuUd41%40thread.tacv2/conversations?groupId=2eb58dd8-d277-4546-a843-229dc35b9cfc&tenantId=da59aced-10ef-4f8b-a2d8-68a3ce6bc7f1"
-                >
-                  <ButtonTable>Virtual room</ButtonTable>
-                </a>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>55</Td>
-              <Td>BASES DE DATOS I</Td>
-              <Td>01</Td>
-              <Td>6:30-8:00</Td>
-              <Td>Mar-Jue</Td>
-              <Td>Presencial</Td>
-              <Td>GB-Lab</Td>
-            </Tr>
-            <Tr>
-              <Td>63</Td>
-              <Td>ALGORITMOS</Td>
-              <Td>05</Td>
-              <Td>9:30-11:00</Td>
-              <Td>Lun-Vie</Td>
-              <Td>Virtual</Td>
-              <Td>
-                <a
-                  target="_blank"
-                  href="https://teams.microsoft.com/l/team/19%3alw8H9l9fzwTT5EHtWFIPo4Iw_PKAUiMOWCqnC2XuUd41%40thread.tacv2/conversations?groupId=2eb58dd8-d277-4546-a843-229dc35b9cfc&tenantId=da59aced-10ef-4f8b-a2d8-68a3ce6bc7f1"
-                >
-                  <ButtonTable>Virtual room</ButtonTable>
-                </a>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>52</Td>
-              <Td>FÍSICA III</Td>
-              <Td>02</Td>
-              <Td>1:00-2:30</Td>
-              <Td>Lun-Vie</Td>
-              <Td>Presencial</Td>
-              <Td>FM-204</Td>
-            </Tr>
+            {user.reverse().map((user) => {
+              return (
+                <Tr key={user.id}>
+                  <Td>{user.inscribed}</Td>
+                  <Td>{user.name}</Td>
+                  <Td>{user.sections}</Td>
+                  <Td>{user.hours}</Td>
+                  <Td>{user.days}</Td>
+                  <Td>{user.class_type}</Td>
+                  {user.classroom.length > 7 ? (
+                    <Td>
+                      <a target="_blank" href={user.classroom}>
+                        <ButtonTable>Virtual room</ButtonTable>
+                      </a>
+                    </Td>
+                  ) : (
+                    <Td>{user.classroom}</Td>
+                  )}
+                  <Td>
+                    <Link to="/timestamp/me">
+                      <ButtonTable
+                        onClick={() => handleTimeStampStart(user.id)}
+                      >
+                        Time Stamp
+                      </ButtonTable>
+                    </Link>
+                  </Td>
+                </Tr>
+              );
+            })}
           </Tbody>
         </Table>
       </TableContainer>

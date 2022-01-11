@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link as LinkRouter } from '@reach/router';
 
 export const Title = styled.h1`
   color: black;
@@ -8,6 +9,15 @@ export const Title = styled.h1`
 
   @media screen and (max-width: 768px) {
     font-size: 18px;
+  }
+`;
+
+export const Link = styled(LinkRouter)`
+  text-decoration: none;
+  color: #fafafa;
+
+  &:hover {
+    color: #ffffff;
   }
 `;
 
