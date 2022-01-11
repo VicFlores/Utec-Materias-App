@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import jwt_decode from 'jwt-decode';
+import { AuthContext } from '../../context/AuthContext';
 import { ButtonTable, Title } from './style';
 import {
   TableContainer,
@@ -9,14 +11,29 @@ import {
   Th,
   Td,
 } from '../../pages/GlobalStyle';
+import { findClassDetail } from '../../helpers/findClassDetails';
 
 export const ClassDetailForm = () => {
+  const [classDetail, setClassDetail] = useState([]);
+  const { auth } = useContext(AuthContext);
+
+  const decoded = jwt_decode(auth);
+
+  const getClassDetail = async () => {
+    const findClass = await findClassDetail(decoded, auth);
+    setClassDetail(findClass);
+  };
+
+  useEffect(() => {
+    getClassDetail();
+  }, []);
+
   return (
     <>
       <Title>Class detail for all teachers</Title>
 
       <TableContainer>
-        <Table>
+        <Table className="animate__animated animate__fadeInLeft">
           <Thead>
             <tr>
               <Th>Inscribed</Th>
@@ -29,67 +46,26 @@ export const ClassDetailForm = () => {
           </Thead>
 
           <Tbody>
-            <Tr>
-              <Td>52</Td>
-              <Td>Vic Ferman Flores Escobar</Td>
-              <Td>PROGRAMACIÓN IV</Td>
-              <Td>03</Td>
-              <Td>Virtual</Td>
-              <Td>
-                <a
-                  target="_blank"
-                  href="https://teams.microsoft.com/l/team/19%3alw8H9l9fzwTT5EHtWFIPo4Iw_PKAUiMOWCqnC2XuUd41%40thread.tacv2/conversations?groupId=2eb58dd8-d277-4546-a843-229dc35b9cfc&tenantId=da59aced-10ef-4f8b-a2d8-68a3ce6bc7f1"
-                >
-                  <ButtonTable>Virtual room</ButtonTable>
-                </a>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>45</Td>
-              <Td>Andrea Elena Navas Hernandez</Td>
-              <Td>ANALISIS DEL CONSUMIDOR</Td>
-              <Td>01</Td>
-              <Td>Presencial</Td>
-              <Td>BJ-404</Td>
-            </Tr>
-            <Tr>
-              <Td>78</Td>
-              <Td>Zaira Renee Flores Hernandez</Td>
-              <Td>AUDITORIA INTERNA</Td>
-              <Td>05</Td>
-              <Td>Presencial</Td>
-              <Td>FM-201</Td>
-            </Tr>
-            <Tr>
-              <Td>63</Td>
-              <Td>Kaylee Maria Henriquez Hernandez</Td>
-              <Td>CREACION DE EMPRESAS (Bilingüe)</Td>
-              <Td>02</Td>
-              <Td>Virtual</Td>
-              <Td>
-                <a
-                  target="_blank"
-                  href="https://teams.microsoft.com/l/team/19%3alw8H9l9fzwTT5EHtWFIPo4Iw_PKAUiMOWCqnC2XuUd41%40thread.tacv2/conversations?groupId=2eb58dd8-d277-4546-a843-229dc35b9cfc&tenantId=da59aced-10ef-4f8b-a2d8-68a3ce6bc7f1"
-                >
-                  <ButtonTable>Virtual room</ButtonTable>
-                </a>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>87</Td>
-              <Td>Fernando Jose Aguilar Rivas</Td>
-              <Td>TRATAMIENTO PSICOLOGICO DEL ADULTO</Td>
-              <Td>01</Td>
-              <Td>Virtual</Td>
-              <Td>
-                <a
-                  target="_blank"
-                  href="https://teams.microsoft.com/l/team/19%3alw8H9l9fzwTT5EHtWFIPo4Iw_PKAUiMOWCqnC2XuUd41%40thread.tacv2/conversations?groupId=2eb58dd8-d277-4546-a843-229dc35b9cfc&tenantId=da59aced-10ef-4f8b-a2d8-68a3ce6bc7f1"
-                >
-                  <ButtonTable>Virtual room</ButtonTable>
-                </a>
-              </Td>
-            </Tr>
+            {classDetail.reverse().map((classDetail) => {
+              return (
+                <Tr key={classDetail.id}>
+                  <Td>{classDetail.inscribed}</Td>
+                  <Td>{`${classDetail.firstname} ${classDetail.lastname}`}</Td>
+                  <Td>{classDetail.name}</Td>
+                  <Td>{classDetail.sections}</Td>
+                  <Td>{classDetail.class_type}</Td>
+                  {classDetail.classroom.length > 7 ? (
+                    <Td>
+                      <a target="_blank" href={classDetail.classroom}>
+                        <ButtonTable>Virtual room</ButtonTable>
+                      </a>
+                    </Td>
+                  ) : (
+                    <Td>{classDetail.classroom}</Td>
+                  )}
+                </Tr>
+              );
+            })}
           </Tbody>
         </Table>
       </TableContainer>
