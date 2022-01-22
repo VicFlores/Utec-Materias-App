@@ -37,8 +37,11 @@ export const Link = styled(LinkRouter)`
 
 export const LogoutContainer = styled.div`
   width: 100%;
-  margin: 10px 0 0 0;
+  margin: 10px 0 30px 0;
   padding: 0 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const Logout = styled.button`
@@ -47,5 +50,9 @@ export const Logout = styled.button`
   border-radius: 5px;
   height: 38px;
   border-style: none;
-  width: 100%;
+  width: 30%;
+
+  @media screen and (min-width: 767px) {
+    width: 100%;
+  }
 `;

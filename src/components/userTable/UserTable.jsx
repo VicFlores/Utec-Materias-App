@@ -13,7 +13,6 @@ import { AuthContext } from '../../context/AuthContext';
 import { findUsers } from '../../helpers/findUsers';
 import jwt_decode from 'jwt-decode';
 import { useNavigate } from '@reach/router';
-import { deleteUser } from '../../helpers/deleteUser';
 
 export const UserTable = () => {
   const [user, setUser] = useState([]);
@@ -23,21 +22,23 @@ export const UserTable = () => {
   const decoded = jwt_decode(auth);
 
   const getUsers = async () => {
-    const response = await findUsers(decoded, auth);
-    if (response.status === 401) {
-      removeAuth();
-      return navigate('/login');
-    }
+    try {
+      const response = await findUsers(decoded, auth);
 
-    return setUser(response);
+      if (response.status === 401) {
+        removeAuth();
+        return navigate('/login');
+      }
+
+      return setUser(response);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   useEffect(() => {
     getUsers();
   }, []);
-
-  const handleDelete = async (id) => {
-    const res = await deleteUser(id, auth, decoded);
-  };
 
   return (
     <>
@@ -53,7 +54,6 @@ export const UserTable = () => {
               <Th>Lastname</Th>
               <Th>Email</Th>
               <Th>Edit</Th>
-              <Th>Delete</Th>
             </tr>
           </Thead>
 
@@ -68,11 +68,6 @@ export const UserTable = () => {
                     <Link to={`/edit-user/${user.id}`}>
                       <ButtonTable options="edit">Edit</ButtonTable>
                     </Link>
-                  </Td>
-                  <Td>
-                    <ButtonTable onClick={() => handleDelete(user.id)}>
-                      Delete
-                    </ButtonTable>
                   </Td>
                 </Tr>
               );

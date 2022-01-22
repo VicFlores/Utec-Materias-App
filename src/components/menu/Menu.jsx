@@ -34,8 +34,6 @@ export const Menu = () => {
     navigate('/login');
   };
 
-  /* console.log(decoded.roles); */
-
   return (
     <MenuContainer menu={burgerMenu}>
       {decoded.roles === 'admin' ? (
@@ -101,6 +99,11 @@ export const Menu = () => {
               Class detail
             </Link>
           </SideBarLi>
+          <LogoutContainer>
+            <Logout type="button" onClick={handleLogout}>
+              Logout
+            </Logout>
+          </LogoutContainer>
         </SideBarUl>
       ) : (
         <SideBarUl>
@@ -117,14 +120,13 @@ export const Menu = () => {
               TimeStamp
             </Link>
           </SideBarLi>
+          <LogoutContainer>
+            <Logout type="button" onClick={handleLogout}>
+              Logout
+            </Logout>
+          </LogoutContainer>
         </SideBarUl>
       )}
-
-      <LogoutContainer>
-        <Logout type="button" onClick={handleLogout}>
-          Logout
-        </Logout>
-      </LogoutContainer>
     </MenuContainer>
   );
 };

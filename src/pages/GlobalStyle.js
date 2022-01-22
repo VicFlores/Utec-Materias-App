@@ -34,11 +34,12 @@ export const TableContainer = styled.section`
   margin: 15px 0 50px 0;
   justify-content: center;
   align-items: flex-start;
+
   overflow-y: scroll;
 
   @media screen and (max-width: 1056px) {
     overflow: scroll;
-    display: block;
+    display: grid;
   }
 `;
 
