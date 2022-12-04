@@ -1,7 +1,7 @@
 export const findTimeStampByUser = async (decoded, token) => {
   try {
     const response = await fetch(
-      `https://utec-subject.herokuapp.com/api/v1/timestamp/mytimestamp/${decoded.sub}`,
+      `https://utec-materias.onrender.com/api/v1/timestamp/mytimestamp/${decoded.sub}`,
       {
         mode: 'cors',
         method: 'GET',

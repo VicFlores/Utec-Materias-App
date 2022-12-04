@@ -1,7 +1,7 @@
 export const findClassDetail = async (decoded, token) => {
   try {
     const response = await fetch(
-      'https://utec-subject.herokuapp.com/api/v1/classdetail',
+      'https://utec-materias.onrender.com/api/v1/classdetail',
       {
         mode: 'cors',
         method: 'GET',

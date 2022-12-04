@@ -1,7 +1,7 @@
 export const findFaculties = async (decoded, token) => {
   try {
     const response = await fetch(
-      'https://utec-subject.herokuapp.com/api/v1/faculties',
+      'https://utec-materias.onrender.com/api/v1/faculties',
       {
         mode: 'cors',
         method: 'GET',

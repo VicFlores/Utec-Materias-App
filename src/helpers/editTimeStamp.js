@@ -1,7 +1,7 @@
 export const editTimeStamp = async (id, token, decoded, data) => {
   try {
     const response = await fetch(
-      `https://utec-subject.herokuapp.com/api/v1/timestamp/${id}`,
+      `https://utec-materias.onrender.com/api/v1/timestamp/${id}`,
       {
         mode: 'cors',
         method: 'PATCH',

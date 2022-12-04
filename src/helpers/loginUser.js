@@ -1,7 +1,7 @@
 export const loginUser = async (data) => {
   try {
     const response = await fetch(
-      'https://utec-subject.herokuapp.com/api/v1/login',
+      'https://utec-materias.onrender.com/api/v1/login',
       {
         mode: 'cors',
         method: 'POST',

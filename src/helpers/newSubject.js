@@ -1,7 +1,7 @@
 export const newSubject = async (token, decoded, data) => {
   try {
     const response = await fetch(
-      'https://utec-subject.herokuapp.com/api/v1/subjects',
+      'https://utec-materias.onrender.com/api/v1/subjects',
       {
         mode: 'cors',
         method: 'POST',

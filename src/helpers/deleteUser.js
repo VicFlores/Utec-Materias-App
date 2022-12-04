@@ -1,7 +1,7 @@
 export const deleteUser = async (id, token, decoded) => {
   try {
     const response = await fetch(
-      `https://utec-subject.herokuapp.com/api/v1/users/${id}`,
+      `https://utec-materias.onrender.com/api/v1/users/${id}`,
       {
         mode: 'cors',
         method: 'DELETE',

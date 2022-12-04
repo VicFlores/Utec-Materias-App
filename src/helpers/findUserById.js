@@ -1,7 +1,7 @@
 export const findUserById = async (id, decoded, token) => {
   try {
     const response = await fetch(
-      `https://utec-subject.herokuapp.com/api/v1/users/specific/${id}`,
+      `https://utec-materias.onrender.com/api/v1/users/specific/${id}`,
       {
         mode: 'cors',
         method: 'GET',
